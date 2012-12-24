@@ -1,0 +1,43 @@
+From 2a474192becfdc258a3fadba2f7ad4d043488eb7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Adrien=20T=C3=A9tar?= <adri-from-59@hotmail.fr>
+Date: Mon, 14 May 2012 16:48:15 +0200
+Subject: [PATCH] Linux 2.6.32.31
+
+---
+ Makefile      |    2 +-
+ lib/swiotlb.c |    6 ++----
+ 2 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 723421c..53582cc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ VERSION = 2
+ PATCHLEVEL = 6
+ SUBLEVEL = 32
+-EXTRAVERSION = .30
++EXTRAVERSION = .31
+ NAME = Man-Eating Seals of Antiquity
+ 
+ # *DOCUMENTATION*
+diff --git a/lib/swiotlb.c b/lib/swiotlb.c
+index 7740ee8..ac25cd2 100644
+--- a/lib/swiotlb.c
++++ b/lib/swiotlb.c
+@@ -631,10 +631,8 @@ dma_addr_t swiotlb_map_page(struct device *dev, struct page *page,
+ 	/*
+ 	 * Ensure that the address returned is DMA'ble
+ 	 */
+-	if (!dma_capable(dev, dev_addr, size)) {
+-		swiotlb_tbl_unmap_single(dev, map, size, dir);
+-		dev_addr = swiotlb_virt_to_bus(dev, io_tlb_overflow_buffer);
+-	}
++	if (!dma_capable(dev, dev_addr, size))
++		panic("map_single: bounce buffer is not DMA'ble");
+ 
+ 	return dev_addr;
+ }
+-- 
+1.7.10
+
