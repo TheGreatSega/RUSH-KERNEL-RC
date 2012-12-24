@@ -1,0 +1,45 @@
+From 344859508700bb777e20da6252105aaccc315959 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Adrien=20T=C3=A9tar?= <adri-from-59@hotmail.fr>
+Date: Mon, 14 May 2012 16:53:58 +0200
+Subject: [PATCH] Linux 2.6.32.38
+
+---
+ Makefile       |    2 +-
+ net/rds/rdma.c |    8 --------
+ 2 files changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 223539f..5fb6e5d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ VERSION = 2
+ PATCHLEVEL = 6
+ SUBLEVEL = 32
+-EXTRAVERSION = .37
++EXTRAVERSION = .38
+ NAME = Man-Eating Seals of Antiquity
+ 
+ # *DOCUMENTATION*
+diff --git a/net/rds/rdma.c b/net/rds/rdma.c
+index f7d8c08..6b09b94 100644
+--- a/net/rds/rdma.c
++++ b/net/rds/rdma.c
+@@ -473,14 +473,6 @@ static struct rds_rdma_op *rds_rdma_prepare(struct rds_sock *rs,
+ 
+ 		max_pages = max(nr, max_pages);
+ 		nr_pages += nr;
+-
+-		/*
+-		 * nr_pages for one entry is limited to (UINT_MAX>>PAGE_SHIFT)+1,
+-		 * so tot_pages cannot overflow without first going negative.
+-		 */
+-		if ((int)nr_pages < 0)
+-			ret = -EINVAL;
+-			goto out;
+ 	}
+ 
+ 	pages = kcalloc(max_pages, sizeof(struct page *), GFP_KERNEL);
+-- 
+1.7.10
+
