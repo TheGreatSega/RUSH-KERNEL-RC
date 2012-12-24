@@ -1,5 +1,101 @@
+From 3dd807ad1c8def8b618cdc2a4fa2a953896e8a32 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Adrien=20T=C3=A9tar?= <adri-from-59@hotmail.fr>
+Date: Mon, 14 May 2012 16:47:22 +0200
+Subject: [PATCH] Linux 2.6.32.30
+
+---
+ Makefile                                   |    2 +-
+ arch/arm/kernel/signal.c                   |    4 +-
+ arch/s390/include/asm/processor.h          |    5 -
+ arch/s390/kernel/traps.c                   |   37 ----
+ arch/x86/include/asm/acpi.h                |    1 +
+ arch/x86/include/asm/pvclock.h             |    1 +
+ arch/x86/kernel/acpi/boot.c                |   14 +-
+ arch/x86/kernel/early-quirks.c             |   16 +-
+ arch/x86/kernel/hpet.c                     |   12 +-
+ arch/x86/kernel/pvclock.c                  |    5 +
+ arch/x86/xen/time.c                        |    2 +
+ drivers/block/pktcdvd.c                    |    2 +-
+ drivers/isdn/hisax/config.c                |   18 +-
+ drivers/isdn/hisax/hisax.h                 |    1 +
+ drivers/md/dm-raid1.c                      |    2 +-
+ drivers/md/dm-region-hash.c                |    5 +-
+ drivers/md/md.c                            |    3 +
+ drivers/media/dvb/ttpci/av7110_ca.c        |    2 +-
+ drivers/media/radio/radio-aimslab.c        |    1 +
+ drivers/message/fusion/mptctl.c            |    8 +
+ drivers/message/fusion/mptscsih.c          |    7 +-
+ drivers/net/benet/be.h                     |    2 +
+ drivers/net/benet/be_main.c                |   18 +-
+ drivers/net/bonding/bond_ipv6.c            |    9 +-
+ drivers/net/ixgbe/ixgbe_82599.c            |    1 +
+ drivers/net/ixgbe/ixgbe_main.c             |    3 +
+ drivers/net/ixgbe/ixgbe_type.h             |    1 +
+ drivers/net/wireless/p54/p54pci.c          |   14 +-
+ drivers/platform/x86/acer-wmi.c            |    4 +-
+ drivers/platform/x86/asus_acpi.c           |    8 +-
+ drivers/platform/x86/tc1100-wmi.c          |    2 +-
+ drivers/scsi/device_handler/scsi_dh_alua.c |    2 +
+ drivers/staging/usbip/vhci.h               |    6 +-
+ drivers/staging/usbip/vhci_hcd.c           |   54 +++++-
+ drivers/staging/usbip/vhci_rx.c            |   15 +-
+ drivers/usb/core/hcd-pci.c                 |    4 +-
+ drivers/usb/core/quirks.c                  |    8 +
+ drivers/usb/host/ohci-hcd.c                |    9 +-
+ drivers/usb/host/ohci-pci.c                |   18 ++
+ drivers/usb/host/ohci.h                    |    1 +
+ drivers/usb/host/pci-quirks.c              |   18 +-
+ drivers/usb/host/xhci-ring.c               |   36 ++--
+ drivers/usb/musb/omap2430.c                |    1 +
+ drivers/usb/serial/sierra.c                |    3 +
+ drivers/usb/serial/visor.c                 |   12 ++
+ fs/ecryptfs/inode.c                        |    2 +
+ fs/eventpoll.c                             |   95 ++++++++++
+ fs/file_table.c                            |    2 +-
+ fs/gfs2/bmap.c                             |    2 +-
+ fs/nfs/file.c                              |    2 +-
+ fs/nfsd/nfs4xdr.c                          |    8 +-
+ fs/nfsd/vfs.c                              |    2 +-
+ fs/ocfs2/stack_user.c                      |    2 +-
+ fs/partitions/ldm.c                        |    5 +
+ fs/partitions/mac.c                        |   17 +-
+ fs/proc/array.c                            |    5 +-
+ fs/read_write.c                            |    2 -
+ fs/splice.c                                |   24 ++-
+ fs/xfs/linux-2.6/xfs_export.c              |   11 +-
+ fs/xfs/linux-2.6/xfs_ioctl.c               |    7 +-
+ fs/xfs/linux-2.6/xfs_ioctl32.c             |   15 +-
+ fs/xfs/quota/xfs_qm.c                      |   18 +-
+ fs/xfs/quota/xfs_qm_syscalls.c             |   27 ++-
+ fs/xfs/xfs_ialloc.c                        |  150 +++++++++------
+ fs/xfs/xfs_iget.c                          |   10 +-
+ fs/xfs/xfs_inode.c                         |    5 +-
+ fs/xfs/xfs_inode.h                         |    6 +-
+ fs/xfs/xfs_itable.c                        |  284 ++++------------------------
+ fs/xfs/xfs_itable.h                        |   17 --
+ fs/xfs/xfs_log_recover.c                   |    2 +-
+ fs/xfs/xfs_mount.c                         |    2 +-
+ fs/xfs/xfs_rtalloc.c                       |    4 +-
+ fs/xfs/xfs_trans_inode.c                   |    2 +-
+ fs/xfs/xfs_vnodeops.c                      |    2 +-
+ include/linux/cred.h                       |   21 +-
+ kernel/cred.c                              |   41 +++-
+ kernel/irq/manage.c                        |    2 +-
+ kernel/power/snapshot.c                    |    7 +-
+ lib/swiotlb.c                              |    6 +-
+ net/core/filter.c                          |   64 ++++---
+ net/ipv4/tcp.c                             |    2 +-
+ net/sctp/auth.c                            |    8 +-
+ net/sunrpc/cache.c                         |    4 +-
+ net/x25/x25_link.c                         |    4 +
+ security/selinux/hooks.c                   |    6 +-
+ sound/pci/hda/hda_intel.c                  |    1 +
+ sound/usb/caiaq/audio.c                    |    2 +-
+ sound/usb/caiaq/midi.c                     |    2 +-
+ 88 files changed, 669 insertions(+), 628 deletions(-)
+
 diff --git a/Makefile b/Makefile
-index 34f5c21..1e5c60f 100644
+index 7002858..723421c 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,7 +1,7 @@
@@ -12,10 +108,10 @@ index 34f5c21..1e5c60f 100644
  
  # *DOCUMENTATION*
 diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
-index e7714f3..962236a 100644
+index 29a905b..4219252 100644
 --- a/arch/arm/kernel/signal.c
 +++ b/arch/arm/kernel/signal.c
-@@ -389,7 +389,9 @@ setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+@@ -389,7 +389,9 @@ asmlinkage int sys_rt_sigreturn(struct pt_regs *regs)
  	unsigned long handler = (unsigned long)ka->sa.sa_handler;
  	unsigned long retcode;
  	int thumb = 0;
@@ -30,7 +126,7 @@ diff --git a/arch/s390/include/asm/processor.h b/arch/s390/include/asm/processor
 index b427154..0262c28 100644
 --- a/arch/s390/include/asm/processor.h
 +++ b/arch/s390/include/asm/processor.h
-@@ -150,11 +150,6 @@ extern int kernel_thread(int (*fn)(void *), void * arg, unsigned long flags);
+@@ -150,11 +150,6 @@ struct stack_frame {
   */
  extern unsigned long thread_saved_pc(struct task_struct *t);
  
@@ -94,7 +190,7 @@ diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
 index 4518dc5..e0ea85a 100644
 --- a/arch/x86/include/asm/acpi.h
 +++ b/arch/x86/include/asm/acpi.h
-@@ -89,6 +89,7 @@ extern int acpi_ht;
+@@ -89,6 +89,7 @@
  extern int acpi_pci_disabled;
  extern int acpi_skip_timer_override;
  extern int acpi_use_timer_override;
@@ -106,7 +202,7 @@ diff --git a/arch/x86/include/asm/pvclock.h b/arch/x86/include/asm/pvclock.h
 index 53235fd..daaacab 100644
 --- a/arch/x86/include/asm/pvclock.h
 +++ b/arch/x86/include/asm/pvclock.h
-@@ -10,5 +10,6 @@ unsigned long pvclock_tsc_khz(struct pvclock_vcpu_time_info *src);
+@@ -10,5 +10,6 @@
  void pvclock_read_wallclock(struct pvclock_wall_clock *wall,
  			    struct pvclock_vcpu_time_info *vcpu,
  			    struct timespec *ts);
@@ -117,7 +213,7 @@ diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
 index 23c2da8..8ba08c7 100644
 --- a/arch/x86/kernel/acpi/boot.c
 +++ b/arch/x86/kernel/acpi/boot.c
-@@ -70,6 +70,7 @@ u8 acpi_sci_flags __initdata;
+@@ -70,6 +70,7 @@
  int acpi_sci_override_gsi __initdata;
  int acpi_skip_timer_override __initdata;
  int acpi_use_timer_override __initdata;
@@ -125,7 +221,7 @@ index 23c2da8..8ba08c7 100644
  
  #ifdef CONFIG_X86_LOCAL_APIC
  static u64 acpi_lapic_addr __initdata = APIC_DEFAULT_PHYS_BASE;
-@@ -360,10 +361,15 @@ acpi_parse_int_src_ovr(struct acpi_subtable_header * header,
+@@ -360,10 +361,15 @@ static void __init acpi_sci_ioapic_setup(u32 gsi, u16 polarity, u16 trigger)
  		return 0;
  	}
  
@@ -403,7 +499,7 @@ diff --git a/drivers/message/fusion/mptctl.c b/drivers/message/fusion/mptctl.c
 index 352acd0..8c85632 100644
 --- a/drivers/message/fusion/mptctl.c
 +++ b/drivers/message/fusion/mptctl.c
-@@ -577,6 +577,13 @@ mptctl_event_process(MPT_ADAPTER *ioc, EventNotificationReply_t *pEvReply)
+@@ -577,6 +577,13 @@ static int mptctl_bus_reset(MPT_ADAPTER *ioc, u8 function)
  }
  
  static int
@@ -417,7 +513,7 @@ index 352acd0..8c85632 100644
  mptctl_fasync(int fd, struct file *filep, int mode)
  {
  	MPT_ADAPTER	*ioc;
-@@ -2778,6 +2785,7 @@ static const struct file_operations mptctl_fops = {
+@@ -2778,6 +2785,7 @@ static int mptctl_do_reset(unsigned long arg)
  	.llseek =	no_llseek,
  	.fasync = 	mptctl_fasync,
  	.unlocked_ioctl = mptctl_ioctl,
@@ -429,7 +525,7 @@ diff --git a/drivers/message/fusion/mptscsih.c b/drivers/message/fusion/mptscsih
 index 56d98eb..bd096ca 100644
 --- a/drivers/message/fusion/mptscsih.c
 +++ b/drivers/message/fusion/mptscsih.c
-@@ -1835,8 +1835,9 @@ mptscsih_abort(struct scsi_cmnd * SCpnt)
+@@ -1835,8 +1835,9 @@ struct info_str {
  	}
  
   out:
@@ -441,7 +537,7 @@ index 56d98eb..bd096ca 100644
  
  	return retval;
  }
-@@ -1873,7 +1874,7 @@ mptscsih_dev_reset(struct scsi_cmnd * SCpnt)
+@@ -1873,7 +1874,7 @@ struct info_str {
  
  	vdevice = SCpnt->device->hostdata;
  	if (!vdevice || !vdevice->vtarget) {
@@ -568,7 +664,7 @@ diff --git a/drivers/net/ixgbe/ixgbe_main.c b/drivers/net/ixgbe/ixgbe_main.c
 index a873c5d..20db37e 100644
 --- a/drivers/net/ixgbe/ixgbe_main.c
 +++ b/drivers/net/ixgbe/ixgbe_main.c
-@@ -100,6 +100,8 @@ static struct pci_device_id ixgbe_pci_tbl[] = {
+@@ -100,6 +100,8 @@
  	 board_82599 },
  	{PCI_VDEVICE(INTEL, IXGBE_DEV_ID_82599_SFP),
  	 board_82599 },
@@ -681,7 +777,7 @@ diff --git a/drivers/platform/x86/tc1100-wmi.c b/drivers/platform/x86/tc1100-wmi
 index 4416600..00aabd3 100644
 --- a/drivers/platform/x86/tc1100-wmi.c
 +++ b/drivers/platform/x86/tc1100-wmi.c
-@@ -177,7 +177,7 @@ set_bool_##value(struct device *dev, struct device_attribute *attr, \
+@@ -177,7 +177,7 @@ static int set_state(u32 *in, u8 instance)
  			return -EINVAL; \
  	return count; \
  } \
@@ -694,7 +790,7 @@ diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_ha
 index b5cdefa..e2a3719 100644
 --- a/drivers/scsi/device_handler/scsi_dh_alua.c
 +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-@@ -701,6 +701,8 @@ static const struct scsi_dh_devlist alua_dev_list[] = {
+@@ -701,6 +701,8 @@ static int alua_prep_fn(struct scsi_device *sdev, struct request *req)
  	{"IBM", "2145" },
  	{"Pillar", "Axiom" },
  	{"Intel", "Multi-Flex"},
@@ -717,7 +813,7 @@ index 5e37517..57f7946 100644
  };
  
  
-@@ -119,6 +116,9 @@ void rh_port_disconnect(int rhport);
+@@ -119,6 +116,9 @@ struct vhci_hcd {
  void vhci_rx_loop(struct usbip_task *ut);
  void vhci_tx_loop(struct usbip_task *ut);
  
@@ -930,7 +1026,7 @@ diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
 index 80b062b..62e1cfd 100644
 --- a/drivers/usb/core/quirks.c
 +++ b/drivers/usb/core/quirks.c
-@@ -48,6 +48,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+@@ -48,6 +48,10 @@
  	{ USB_DEVICE(0x04b4, 0x0526), .driver_info =
  			USB_QUIRK_CONFIG_INTF_STRINGS },
  
@@ -941,7 +1037,7 @@ index 80b062b..62e1cfd 100644
  	/* Roland SC-8820 */
  	{ USB_DEVICE(0x0582, 0x0007), .driver_info = USB_QUIRK_RESET_RESUME },
  
-@@ -68,6 +72,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+@@ -68,6 +72,10 @@
  	/* M-Systems Flash Disk Pioneers */
  	{ USB_DEVICE(0x08ec, 0x1000), .driver_info = USB_QUIRK_RESET_RESUME },
  
@@ -956,7 +1052,7 @@ diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
 index 24eb747..48418f2 100644
 --- a/drivers/usb/host/ohci-hcd.c
 +++ b/drivers/usb/host/ohci-hcd.c
-@@ -398,7 +398,14 @@ ohci_shutdown (struct usb_hcd *hcd)
+@@ -398,7 +398,14 @@ static void ohci_usb_reset (struct ohci_hcd *ohci)
  
  	ohci = hcd_to_ohci (hcd);
  	ohci_writel (ohci, OHCI_INTR_MIE, &ohci->regs->intrdisable);
@@ -997,7 +1093,7 @@ index b8a1148..948a353 100644
  /*
   * The hardware normally enables the A-link power management feature, which
   * lets the system lower the power consumption in idle states.
-@@ -332,6 +346,10 @@ static const struct pci_device_id ohci_pci_quirks[] = {
+@@ -332,6 +346,10 @@ static void sb800_prefetch(struct ohci_hcd *ohci, int on)
  		PCI_DEVICE(PCI_VENDOR_ID_ATI, 0x4399),
  		.driver_data = (unsigned long)ohci_quirk_amd700,
  	},
@@ -1193,7 +1289,7 @@ diff --git a/drivers/usb/serial/sierra.c b/drivers/usb/serial/sierra.c
 index 328578b..1b5c9f8 100644
 --- a/drivers/usb/serial/sierra.c
 +++ b/drivers/usb/serial/sierra.c
-@@ -266,6 +266,9 @@ static struct usb_device_id id_table [] = {
+@@ -266,6 +266,9 @@ static int sierra_probe(struct usb_serial *serial,
  	{ USB_DEVICE(0x1199, 0x68A3), 	/* Sierra Wireless Direct IP modems */
  	  .driver_info = (kernel_ulong_t)&direct_ip_interface_blacklist
  	},
@@ -1264,7 +1360,7 @@ index 085c5c0..b0286c6 100644
   * It is possible to drop the "ep->mtx" and to use the global
   * mutex "epmutex" (together with "ep->lock") to have it working,
   * but having "ep->mtx" will make the interface more scalable.
-@@ -227,6 +234,9 @@ static int max_user_watches __read_mostly;
+@@ -227,6 +234,9 @@ struct ep_send_events_data {
   */
  static DEFINE_MUTEX(epmutex);
  
@@ -1274,7 +1370,7 @@ index 085c5c0..b0286c6 100644
  /* Used for safe wake up implementation */
  static struct nested_calls poll_safewake_ncalls;
  
-@@ -1182,6 +1192,62 @@ retry:
+@@ -1182,6 +1192,62 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
  	return res;
  }
  
@@ -1337,7 +1433,7 @@ index 085c5c0..b0286c6 100644
  /*
   * Open an eventpoll file descriptor.
   */
-@@ -1230,6 +1296,7 @@ SYSCALL_DEFINE4(epoll_ctl, int, epfd, int, op, int, fd,
+@@ -1230,6 +1296,7 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
  		struct epoll_event __user *, event)
  {
  	int error;
@@ -1345,7 +1441,7 @@ index 085c5c0..b0286c6 100644
  	struct file *file, *tfile;
  	struct eventpoll *ep;
  	struct epitem *epi;
-@@ -1271,6 +1338,25 @@ SYSCALL_DEFINE4(epoll_ctl, int, epfd, int, op, int, fd,
+@@ -1271,6 +1338,25 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
  	 */
  	ep = file->private_data;
  
@@ -1371,7 +1467,7 @@ index 085c5c0..b0286c6 100644
  	mutex_lock(&ep->mtx);
  
  	/*
-@@ -1306,6 +1392,9 @@ SYSCALL_DEFINE4(epoll_ctl, int, epfd, int, op, int, fd,
+@@ -1306,6 +1392,9 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
  	mutex_unlock(&ep->mtx);
  
  error_tgt_fput:
@@ -1443,7 +1539,7 @@ diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
 index 12f62ff..e5bab6e 100644
 --- a/fs/nfsd/nfs4xdr.c
 +++ b/fs/nfsd/nfs4xdr.c
-@@ -323,8 +323,8 @@ nfsd4_decode_fattr(struct nfsd4_compoundargs *argp, u32 *bmval,
+@@ -323,8 +323,8 @@ static char *savemem(struct nfsd4_compoundargs *argp, __be32 *p, int nbytes)
  		READ_BUF(dummy32);
  		len += (XDR_QUADLEN(dummy32) << 2);
  		READMEM(buf, dummy32);
@@ -1454,7 +1550,7 @@ index 12f62ff..e5bab6e 100644
  		iattr->ia_valid |= ATTR_UID;
  	}
  	if (bmval[1] & FATTR4_WORD1_OWNER_GROUP) {
-@@ -334,8 +334,8 @@ nfsd4_decode_fattr(struct nfsd4_compoundargs *argp, u32 *bmval,
+@@ -334,8 +334,8 @@ static char *savemem(struct nfsd4_compoundargs *argp, __be32 *p, int nbytes)
  		READ_BUF(dummy32);
  		len += (XDR_QUADLEN(dummy32) << 2);
  		READMEM(buf, dummy32);
@@ -1469,7 +1565,7 @@ diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
 index 570dd1c..060a889 100644
 --- a/fs/nfsd/vfs.c
 +++ b/fs/nfsd/vfs.c
-@@ -823,7 +823,7 @@ nfsd_get_raparms(dev_t dev, ino_t ino)
+@@ -823,7 +823,7 @@ static inline int nfsd_dosync(struct file *filp, struct dentry *dp,
  		if (ra->p_count == 0)
  			frap = rap;
  	}
@@ -1659,7 +1755,7 @@ diff --git a/fs/xfs/linux-2.6/xfs_export.c b/fs/xfs/linux-2.6/xfs_export.c
 index 87b8cbd..2521171 100644
 --- a/fs/xfs/linux-2.6/xfs_export.c
 +++ b/fs/xfs/linux-2.6/xfs_export.c
-@@ -127,13 +127,12 @@ xfs_nfs_get_inode(
+@@ -127,13 +127,12 @@ static int xfs_fileid_length(int fileid_type)
  		return ERR_PTR(-ESTALE);
  
  	/*
@@ -1682,7 +1778,7 @@ diff --git a/fs/xfs/linux-2.6/xfs_ioctl.c b/fs/xfs/linux-2.6/xfs_ioctl.c
 index 98fe0db..61496c6 100644
 --- a/fs/xfs/linux-2.6/xfs_ioctl.c
 +++ b/fs/xfs/linux-2.6/xfs_ioctl.c
-@@ -673,10 +673,9 @@ xfs_ioc_bulkstat(
+@@ -673,10 +673,9 @@ struct dentry *
  		error = xfs_bulkstat_single(mp, &inlast,
  						bulkreq.ubuffer, &done);
  	else	/* XFS_IOC_FSBULKSTAT */
@@ -1700,7 +1796,7 @@ diff --git a/fs/xfs/linux-2.6/xfs_ioctl32.c b/fs/xfs/linux-2.6/xfs_ioctl32.c
 index eafcc7c..bad485a 100644
 --- a/fs/xfs/linux-2.6/xfs_ioctl32.c
 +++ b/fs/xfs/linux-2.6/xfs_ioctl32.c
-@@ -235,15 +235,12 @@ xfs_bulkstat_one_compat(
+@@ -235,15 +235,12 @@
  	xfs_ino_t	ino,		/* inode number to get data for */
  	void		__user *buffer,	/* buffer to place output in */
  	int		ubsize,		/* size of buffer */
@@ -1718,7 +1814,7 @@ index eafcc7c..bad485a 100644
  }
  
  /* copied from xfs_ioctl.c */
-@@ -296,13 +293,11 @@ xfs_compat_ioc_bulkstat(
+@@ -296,13 +293,11 @@
  		int res;
  
  		error = xfs_bulkstat_one_compat(mp, inlast, bulkreq.ubuffer,
@@ -1739,7 +1835,7 @@ diff --git a/fs/xfs/quota/xfs_qm.c b/fs/xfs/quota/xfs_qm.c
 index 45b1bfe..6b7e171 100644
 --- a/fs/xfs/quota/xfs_qm.c
 +++ b/fs/xfs/quota/xfs_qm.c
-@@ -1606,10 +1606,7 @@ xfs_qm_dqusage_adjust(
+@@ -1606,10 +1606,7 @@
  	xfs_ino_t	ino,		/* inode number to get data for */
  	void		__user *buffer,	/* not used */
  	int		ubsize,		/* not used */
@@ -1750,7 +1846,7 @@ index 45b1bfe..6b7e171 100644
  	int		*res)		/* result code value */
  {
  	xfs_inode_t	*ip;
-@@ -1634,7 +1631,7 @@ xfs_qm_dqusage_adjust(
+@@ -1634,7 +1631,7 @@
  	 * the case in all other instances. It's OK that we do this because
  	 * quotacheck is done only at mount time.
  	 */
@@ -1759,7 +1855,7 @@ index 45b1bfe..6b7e171 100644
  		*res = BULKSTAT_RV_NOTHING;
  		return error;
  	}
-@@ -1766,12 +1763,13 @@ xfs_qm_quotacheck(
+@@ -1766,12 +1763,13 @@
  		 * Iterate thru all the inodes in the file system,
  		 * adjusting the corresponding dquot counters in core.
  		 */
@@ -1777,7 +1873,7 @@ index 45b1bfe..6b7e171 100644
  
  	/*
  	 * We've made all the changes that we need to make incore.
-@@ -1859,14 +1857,14 @@ xfs_qm_init_quotainos(
+@@ -1859,14 +1857,14 @@
  		    mp->m_sb.sb_uquotino != NULLFSINO) {
  			ASSERT(mp->m_sb.sb_uquotino > 0);
  			if ((error = xfs_iget(mp, NULL, mp->m_sb.sb_uquotino,
@@ -1798,7 +1894,7 @@ diff --git a/fs/xfs/quota/xfs_qm_syscalls.c b/fs/xfs/quota/xfs_qm_syscalls.c
 index 60fe358..407ddab 100644
 --- a/fs/xfs/quota/xfs_qm_syscalls.c
 +++ b/fs/xfs/quota/xfs_qm_syscalls.c
-@@ -266,7 +266,7 @@ xfs_qm_scall_trunc_qfiles(
+@@ -266,7 +266,7 @@ STATIC void	xfs_qm_export_dquot(xfs_mount_t *, xfs_disk_dquot_t *,
  	}
  
  	if ((flags & XFS_DQ_USER) && mp->m_sb.sb_uquotino != NULLFSINO) {
@@ -1807,7 +1903,7 @@ index 60fe358..407ddab 100644
  		if (!error) {
  			error = xfs_truncate_file(mp, qip);
  			IRELE(qip);
-@@ -275,7 +275,7 @@ xfs_qm_scall_trunc_qfiles(
+@@ -275,7 +275,7 @@ STATIC void	xfs_qm_export_dquot(xfs_mount_t *, xfs_disk_dquot_t *,
  
  	if ((flags & (XFS_DQ_GROUP|XFS_DQ_PROJ)) &&
  	    mp->m_sb.sb_gquotino != NULLFSINO) {
@@ -1816,7 +1912,7 @@ index 60fe358..407ddab 100644
  		if (!error2) {
  			error2 = xfs_truncate_file(mp, qip);
  			IRELE(qip);
-@@ -420,12 +420,12 @@ xfs_qm_scall_getqstat(
+@@ -420,12 +420,12 @@ STATIC void	xfs_qm_export_dquot(xfs_mount_t *, xfs_disk_dquot_t *,
  	}
  	if (!uip && mp->m_sb.sb_uquotino != NULLFSINO) {
  		if (xfs_iget(mp, NULL, mp->m_sb.sb_uquotino,
@@ -1831,7 +1927,7 @@ index 60fe358..407ddab 100644
  			tempgqip = B_TRUE;
  	}
  	if (uip) {
-@@ -1114,10 +1114,7 @@ xfs_qm_internalqcheck_adjust(
+@@ -1114,10 +1114,7 @@ STATIC void	xfs_qm_export_dquot(xfs_mount_t *, xfs_disk_dquot_t *,
  	xfs_ino_t	ino,		/* inode number to get data for */
  	void		__user *buffer,	/* not used */
  	int		ubsize,		/* not used */
@@ -1842,7 +1938,7 @@ index 60fe358..407ddab 100644
  	int		*res)		/* bulkstat result code */
  {
  	xfs_inode_t		*ip;
-@@ -1139,7 +1136,7 @@ xfs_qm_internalqcheck_adjust(
+@@ -1139,7 +1136,7 @@ STATIC void	xfs_qm_export_dquot(xfs_mount_t *, xfs_disk_dquot_t *,
  	ipreleased = B_FALSE;
   again:
  	lock_flags = XFS_ILOCK_SHARED;
@@ -1851,7 +1947,7 @@ index 60fe358..407ddab 100644
  		*res = BULKSTAT_RV_NOTHING;
  		return (error);
  	}
-@@ -1212,15 +1209,15 @@ xfs_qm_internalqcheck(
+@@ -1212,15 +1209,15 @@ STATIC void	xfs_qm_export_dquot(xfs_mount_t *, xfs_disk_dquot_t *,
  		 * Iterate thru all the inodes in the file system,
  		 * adjusting the corresponding dquot counters
  		 */
@@ -1878,7 +1974,7 @@ diff --git a/fs/xfs/xfs_ialloc.c b/fs/xfs/xfs_ialloc.c
 index 0785797..7acab06 100644
 --- a/fs/xfs/xfs_ialloc.c
 +++ b/fs/xfs/xfs_ialloc.c
-@@ -1206,6 +1206,69 @@ error0:
+@@ -1206,6 +1206,69 @@
  	return error;
  }
  
@@ -1948,7 +2044,7 @@ index 0785797..7acab06 100644
  /*
   * Return the location of the inode in imap, for mapping it into a buffer.
   */
-@@ -1238,8 +1301,11 @@ xfs_imap(
+@@ -1238,8 +1301,11 @@
  	if (agno >= mp->m_sb.sb_agcount || agbno >= mp->m_sb.sb_agblocks ||
  	    ino != XFS_AGINO_TO_INO(mp, agno, agino)) {
  #ifdef DEBUG
@@ -1962,7 +2058,7 @@ index 0785797..7acab06 100644
  			return XFS_ERROR(EINVAL);
  		if (agno >= mp->m_sb.sb_agcount) {
  			xfs_fs_cmn_err(CE_ALERT, mp,
-@@ -1266,6 +1332,23 @@ xfs_imap(
+@@ -1266,6 +1332,23 @@
  		return XFS_ERROR(EINVAL);
  	}
  
@@ -1986,7 +2082,7 @@ index 0785797..7acab06 100644
  	/*
  	 * If the inode cluster size is the same as the blocksize or
  	 * smaller we get to the buffer by simple arithmetics.
-@@ -1280,24 +1363,6 @@ xfs_imap(
+@@ -1280,24 +1363,6 @@
  		return 0;
  	}
  
@@ -2011,7 +2107,7 @@ index 0785797..7acab06 100644
  	/*
  	 * If the inode chunks are aligned then use simple maths to
  	 * find the location. Otherwise we have to do a btree
-@@ -1307,52 +1372,13 @@ xfs_imap(
+@@ -1307,52 +1372,13 @@
  		offset_agbno = agbno & mp->m_inoalign_mask;
  		chunk_agbno = agbno - offset_agbno;
  	} else {
@@ -2071,7 +2167,7 @@ diff --git a/fs/xfs/xfs_iget.c b/fs/xfs/xfs_iget.c
 index a04a72f..16b6a33 100644
 --- a/fs/xfs/xfs_iget.c
 +++ b/fs/xfs/xfs_iget.c
-@@ -295,7 +295,6 @@ xfs_iget_cache_miss(
+@@ -295,7 +295,6 @@
  	xfs_trans_t		*tp,
  	xfs_ino_t		ino,
  	struct xfs_inode	**ipp,
@@ -2079,7 +2175,7 @@ index a04a72f..16b6a33 100644
  	int			flags,
  	int			lock_flags) __releases(pag->pag_ici_lock)
  {
-@@ -308,7 +307,7 @@ xfs_iget_cache_miss(
+@@ -308,7 +307,7 @@
  	if (!ip)
  		return ENOMEM;
  
@@ -2088,7 +2184,7 @@ index a04a72f..16b6a33 100644
  	if (error)
  		goto out_destroy;
  
-@@ -392,8 +391,6 @@ out_destroy:
+@@ -392,8 +391,6 @@
   *        within the file system for the inode being requested.
   * lock_flags -- flags indicating how to lock the inode.  See the comment
   *		 for xfs_ilock() for a list of valid values.
@@ -2097,7 +2193,7 @@ index a04a72f..16b6a33 100644
   */
  int
  xfs_iget(
-@@ -402,8 +399,7 @@ xfs_iget(
+@@ -402,8 +399,7 @@
  	xfs_ino_t	ino,
  	uint		flags,
  	uint		lock_flags,
@@ -2107,7 +2203,7 @@ index a04a72f..16b6a33 100644
  {
  	xfs_inode_t	*ip;
  	int		error;
-@@ -434,7 +430,7 @@ again:
+@@ -434,7 +430,7 @@
  		read_unlock(&pag->pag_ici_lock);
  		XFS_STATS_INC(xs_ig_missed);
  
@@ -2120,7 +2216,7 @@ diff --git a/fs/xfs/xfs_inode.c b/fs/xfs/xfs_inode.c
 index 523a1ae..8f43bab 100644
 --- a/fs/xfs/xfs_inode.c
 +++ b/fs/xfs/xfs_inode.c
-@@ -177,7 +177,7 @@ xfs_imap_to_bp(
+@@ -177,7 +177,7 @@
  		if (unlikely(XFS_TEST_ERROR(!di_ok, mp,
  						XFS_ERRTAG_ITOBP_INOTOBP,
  						XFS_RANDOM_ITOBP_INOTOBP))) {
@@ -2129,7 +2225,7 @@ index 523a1ae..8f43bab 100644
  				xfs_trans_brelse(tp, bp);
  				return XFS_ERROR(EINVAL);
  			}
-@@ -787,7 +787,6 @@ xfs_iread(
+@@ -787,7 +787,6 @@
  	xfs_mount_t	*mp,
  	xfs_trans_t	*tp,
  	xfs_inode_t	*ip,
@@ -2137,7 +2233,7 @@ index 523a1ae..8f43bab 100644
  	uint		iget_flags)
  {
  	xfs_buf_t	*bp;
-@@ -797,11 +796,9 @@ xfs_iread(
+@@ -797,11 +796,9 @@
  	/*
  	 * Fill in the location information in the in-core inode.
  	 */
@@ -2162,7 +2258,7 @@ index 41555de..7a86389 100644
  void		xfs_iput(xfs_inode_t *, uint);
  void		xfs_iput_new(xfs_inode_t *, uint);
  void		xfs_ilock(xfs_inode_t *, uint);
-@@ -558,7 +558,7 @@ do { \
+@@ -558,7 +558,7 @@ int		xfs_itruncate_finish(struct xfs_trans **, xfs_inode_t *,
   * Flags for xfs_iget()
   */
  #define XFS_IGET_CREATE		0x1
@@ -2184,7 +2280,7 @@ diff --git a/fs/xfs/xfs_itable.c b/fs/xfs/xfs_itable.c
 index 62efab2..7a4621a 100644
 --- a/fs/xfs/xfs_itable.c
 +++ b/fs/xfs/xfs_itable.c
-@@ -49,24 +49,40 @@ xfs_internal_inum(
+@@ -49,24 +49,40 @@
  		 (ino == mp->m_sb.sb_uquotino || ino == mp->m_sb.sb_gquotino)));
  }
  
@@ -2238,7 +2334,7 @@ index 62efab2..7a4621a 100644
  	}
  
  	ASSERT(ip != NULL);
-@@ -126,76 +142,16 @@ xfs_bulkstat_one_iget(
+@@ -126,76 +142,16 @@
  		buf->bs_blocks = dic->di_nblocks + ip->i_delayed_blks;
  		break;
  	}
@@ -2321,7 +2417,7 @@ index 62efab2..7a4621a 100644
  }
  
  /* Return 0 on success or positive error */
-@@ -215,118 +171,17 @@ xfs_bulkstat_one_fmt(
+@@ -215,118 +171,17 @@
  	return 0;
  }
  
@@ -2441,7 +2537,7 @@ index 62efab2..7a4621a 100644
  }
  
  #define XFS_BULKSTAT_UBLEFT(ubleft)	((ubleft) >= statstruct_size)
-@@ -340,10 +195,8 @@ xfs_bulkstat(
+@@ -340,10 +195,8 @@
  	xfs_ino_t		*lastinop, /* last inode returned */
  	int			*ubcountp, /* size of buffer/count returned */
  	bulkstat_one_pf		formatter, /* func that'd fill a single buf */
@@ -2452,7 +2548,7 @@ index 62efab2..7a4621a 100644
  	int			*done)	/* 1 if there are more stats to get */
  {
  	xfs_agblock_t		agbno=0;/* allocation group block number */
-@@ -378,14 +231,12 @@ xfs_bulkstat(
+@@ -378,14 +231,12 @@
  	int			ubelem;	/* spaces used in user's buffer */
  	int			ubused;	/* bytes used by formatter */
  	xfs_buf_t		*bp;	/* ptr to on-disk inode cluster buf */
@@ -2467,7 +2563,7 @@ index 62efab2..7a4621a 100644
  	agno = XFS_INO_TO_AGNO(mp, ino);
  	agino = XFS_INO_TO_AGINO(mp, ino);
  	if (agno >= mp->m_sb.sb_agcount ||
-@@ -610,37 +461,6 @@ xfs_bulkstat(
+@@ -610,37 +461,6 @@
  							irbp->ir_startino) +
  						((chunkidx & nimask) >>
  						 mp->m_sb.sb_inopblog);
@@ -2505,7 +2601,7 @@ index 62efab2..7a4621a 100644
  				}
  				ino = XFS_AGINO_TO_INO(mp, agno, agino);
  				bno = XFS_AGB_TO_DADDR(mp, agno, agbno);
-@@ -656,35 +476,13 @@ xfs_bulkstat(
+@@ -656,35 +476,13 @@
  				 * when the chunk is used up.
  				 */
  				irbp->ir_freecount++;
@@ -2543,7 +2639,7 @@ index 62efab2..7a4621a 100644
  				if (fmterror == BULKSTAT_RV_NOTHING) {
  					if (error && error != ENOENT &&
  						error != EINVAL) {
-@@ -776,8 +574,7 @@ xfs_bulkstat_single(
+@@ -776,8 +574,7 @@
  	 */
  
  	ino = (xfs_ino_t)*lastinop;
@@ -2553,7 +2649,7 @@ index 62efab2..7a4621a 100644
  	if (error) {
  		/*
  		 * Special case way failed, do it the "long" way
-@@ -786,8 +583,7 @@ xfs_bulkstat_single(
+@@ -786,8 +583,7 @@
  		(*lastinop)--;
  		count = 1;
  		if (xfs_bulkstat(mp, lastinop, &count, xfs_bulkstat_one,
@@ -2592,7 +2688,7 @@ index 20792bf..97295d9 100644
   * Return stat information in bulk (by-inode) for the filesystem.
   */
  int					/* error status */
-@@ -56,10 +46,8 @@ xfs_bulkstat(
+@@ -56,10 +46,8 @@ typedef int (*bulkstat_one_pf)(struct xfs_mount	*mp,
  	xfs_ino_t	*lastino,	/* last inode returned */
  	int		*count,		/* size of buffer/count returned */
  	bulkstat_one_pf formatter,	/* func that'd fill a single buf */
@@ -2603,7 +2699,7 @@ index 20792bf..97295d9 100644
  	int		*done);		/* 1 if there are more stats to get */
  
  int
-@@ -82,9 +70,7 @@ xfs_bulkstat_one_int(
+@@ -82,9 +70,7 @@ typedef int (*bulkstat_one_fmt_pf)(  /* used size in bytes or negative error */
  	void			__user *buffer,
  	int			ubsize,
  	bulkstat_one_fmt_pf	formatter,
@@ -2613,7 +2709,7 @@ index 20792bf..97295d9 100644
  	int			*stat);
  
  int
-@@ -93,10 +79,7 @@ xfs_bulkstat_one(
+@@ -93,10 +79,7 @@ typedef int (*bulkstat_one_fmt_pf)(  /* used size in bytes or negative error */
  	xfs_ino_t		ino,
  	void			__user *buffer,
  	int			ubsize,
@@ -2628,7 +2724,7 @@ diff --git a/fs/xfs/xfs_log_recover.c b/fs/xfs/xfs_log_recover.c
 index b5b0d80..844a99b 100644
 --- a/fs/xfs/xfs_log_recover.c
 +++ b/fs/xfs/xfs_log_recover.c
-@@ -3209,7 +3209,7 @@ xlog_recover_process_one_iunlink(
+@@ -3209,7 +3209,7 @@ STATIC void	xlog_recover_insert_item_backq(xlog_recover_item_t **q,
  	int				error;
  
  	ino = XFS_AGINO_TO_INO(mp, agno, agino);
@@ -2641,7 +2737,7 @@ diff --git a/fs/xfs/xfs_mount.c b/fs/xfs/xfs_mount.c
 index 4d509f7..0a25d9e 100644
 --- a/fs/xfs/xfs_mount.c
 +++ b/fs/xfs/xfs_mount.c
-@@ -1207,7 +1207,7 @@ xfs_mountfs(
+@@ -1207,7 +1207,7 @@ STATIC int	xfs_icsb_modify_counters(xfs_mount_t *, xfs_sb_field_t,
  	 * Get and sanity-check the root inode.
  	 * Save the pointer to it in the mount structure.
  	 */
@@ -2654,7 +2750,7 @@ diff --git a/fs/xfs/xfs_rtalloc.c b/fs/xfs/xfs_rtalloc.c
 index 385f6dc..be69135 100644
 --- a/fs/xfs/xfs_rtalloc.c
 +++ b/fs/xfs/xfs_rtalloc.c
-@@ -2274,12 +2274,12 @@ xfs_rtmount_inodes(
+@@ -2274,12 +2274,12 @@ STATIC int xfs_rtmodify_summary(xfs_mount_t *, xfs_trans_t *, int,
  	sbp = &mp->m_sb;
  	if (sbp->sb_rbmino == NULLFSINO)
  		return 0;
@@ -2673,7 +2769,7 @@ diff --git a/fs/xfs/xfs_trans_inode.c b/fs/xfs/xfs_trans_inode.c
 index 785ff10..2559dfe 100644
 --- a/fs/xfs/xfs_trans_inode.c
 +++ b/fs/xfs/xfs_trans_inode.c
-@@ -62,7 +62,7 @@ xfs_trans_iget(
+@@ -62,7 +62,7 @@
  {
  	int			error;
  
@@ -2686,7 +2782,7 @@ diff --git a/fs/xfs/xfs_vnodeops.c b/fs/xfs/xfs_vnodeops.c
 index 38a6324..8f32f50 100644
 --- a/fs/xfs/xfs_vnodeops.c
 +++ b/fs/xfs/xfs_vnodeops.c
-@@ -1371,7 +1371,7 @@ xfs_lookup(
+@@ -1371,7 +1371,7 @@
  	if (error)
  		goto out;
  
@@ -2819,10 +2915,10 @@ index 5fce398..0b5b5fc 100644
  			return true;
  		if ((*(u32 *)cred->security & 0xffffff00) ==
 diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index f34e231..5fad88b 100644
+index 3b5cf1a..42f2228 100644
 --- a/kernel/irq/manage.c
 +++ b/kernel/irq/manage.c
-@@ -1079,7 +1079,7 @@ int request_threaded_irq(unsigned int irq, irq_handler_t handler,
+@@ -1064,7 +1064,7 @@ int request_threaded_irq(unsigned int irq, irq_handler_t handler,
  	if (retval)
  		kfree(action);
  
@@ -2835,7 +2931,7 @@ diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
 index fc9ed15..a8520b0 100644
 --- a/kernel/power/snapshot.c
 +++ b/kernel/power/snapshot.c
-@@ -1466,11 +1466,8 @@ static int
+@@ -1466,11 +1466,8 @@ static inline int get_highmem_buffer(int safe_needed)
  swsusp_alloc(struct memory_bitmap *orig_bm, struct memory_bitmap *copy_bm,
  		unsigned int nr_pages, unsigned int nr_highmem)
  {
@@ -2848,7 +2944,7 @@ index fc9ed15..a8520b0 100644
  			goto err_out;
  		if (nr_highmem > alloc_highmem) {
  			nr_highmem -= alloc_highmem;
-@@ -1493,7 +1490,7 @@ swsusp_alloc(struct memory_bitmap *orig_bm, struct memory_bitmap *copy_bm,
+@@ -1493,7 +1490,7 @@ static inline int get_highmem_buffer(int safe_needed)
  
   err_out:
  	swsusp_free();
@@ -2878,7 +2974,7 @@ diff --git a/net/core/filter.c b/net/core/filter.c
 index d1d779c..0127397 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -111,39 +111,41 @@ EXPORT_SYMBOL(sk_filter);
+@@ -111,39 +111,41 @@ int sk_filter(struct sock *sk, struct sk_buff *skb)
   */
  unsigned int sk_run_filter(struct sk_buff *skb, struct sock_filter *filter, int flen)
  {
@@ -2994,7 +3090,7 @@ index d1d779c..0127397 100644
  load_w:
  			ptr = load_pointer(skb, k, 4, &tmp);
  			if (ptr != NULL) {
-@@ -217,7 +219,7 @@ load_w:
+@@ -217,7 +219,7 @@ unsigned int sk_run_filter(struct sk_buff *skb, struct sock_filter *filter, int
  			}
  			break;
  		case BPF_LD|BPF_H|BPF_ABS:
@@ -3003,7 +3099,7 @@ index d1d779c..0127397 100644
  load_h:
  			ptr = load_pointer(skb, k, 2, &tmp);
  			if (ptr != NULL) {
-@@ -226,7 +228,7 @@ load_h:
+@@ -226,7 +228,7 @@ unsigned int sk_run_filter(struct sk_buff *skb, struct sock_filter *filter, int
  			}
  			break;
  		case BPF_LD|BPF_B|BPF_ABS:
@@ -3012,7 +3108,7 @@ index d1d779c..0127397 100644
  load_b:
  			ptr = load_pointer(skb, k, 1, &tmp);
  			if (ptr != NULL) {
-@@ -241,32 +243,34 @@ load_b:
+@@ -241,32 +243,34 @@ unsigned int sk_run_filter(struct sk_buff *skb, struct sock_filter *filter, int
  			X = skb->len;
  			continue;
  		case BPF_LD|BPF_W|BPF_IND:
@@ -3055,7 +3151,7 @@ index d1d779c..0127397 100644
  			continue;
  		case BPF_MISC|BPF_TAX:
  			X = A;
-@@ -275,14 +279,16 @@ load_b:
+@@ -275,14 +279,16 @@ unsigned int sk_run_filter(struct sk_buff *skb, struct sock_filter *filter, int
  			A = X;
  			continue;
  		case BPF_RET|BPF_K:
@@ -3076,10 +3172,10 @@ index d1d779c..0127397 100644
  		default:
  			WARN_ON(1);
 diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 734fe94..f095659 100644
+index 2b60313..f33454f 100644
 --- a/net/ipv4/tcp.c
 +++ b/net/ipv4/tcp.c
-@@ -2117,7 +2117,7 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
+@@ -2217,7 +2217,7 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
  		/* Values greater than interface MTU won't take effect. However
  		 * at the point when this call is done we typically don't yet
  		 * know which interface is going to be used */
@@ -3169,7 +3265,7 @@ diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
 index ca73fe9..dbe35ed 100644
 --- a/sound/pci/hda/hda_intel.c
 +++ b/sound/pci/hda/hda_intel.c
-@@ -2236,6 +2236,7 @@ static struct snd_pci_quirk position_fix_list[] __devinitdata = {
+@@ -2236,6 +2236,7 @@ static int azx_dev_free(struct snd_device *device)
  	SND_PCI_QUIRK(0x1043, 0x813d, "ASUS P5AD2", POS_FIX_LPIB),
  	SND_PCI_QUIRK(0x1043, 0x81b3, "ASUS", POS_FIX_LPIB),
  	SND_PCI_QUIRK(0x1043, 0x81e7, "ASUS M2V", POS_FIX_LPIB),
@@ -3203,3 +3299,6 @@ index 538e8c0..bd55649 100644
  
  	rmidi->info_flags = SNDRV_RAWMIDI_INFO_DUPLEX;
  	rmidi->private_data = device;
+-- 
+1.7.10
+
