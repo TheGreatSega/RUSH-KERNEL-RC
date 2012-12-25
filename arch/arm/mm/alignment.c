@@ -713,7 +713,7 @@ do_alignment_t32_to_handler(unsigned long *pinstr, struct pt_regs *regs,
 static int
 do_alignment(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
 {
-	union offset_union offset;
+	union offset_union offset = {.un = 0};
 	unsigned long instr = 0, instrptr;
 	int (*handler)(unsigned long addr, unsigned long instr, struct pt_regs *regs);
 	unsigned int type;
@@ -822,6 +822,7 @@ do_alignment(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
 			handler = do_alignment_t32_to_handler(&instr, regs, &offset);
 		else
 			handler = do_alignment_ldmstm;
+					  offset.un = 0;
 		break;
 
 	default:

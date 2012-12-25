@@ -258,7 +258,6 @@ static void rfcomm_dlc_timeout(unsigned long arg)
 	BT_DBG("dlc %p state %ld", d, d->state);
 
 	set_bit(RFCOMM_TIMED_OUT, &d->flags);
-	rfcomm_dlc_put(d);
 	rfcomm_schedule(RFCOMM_SCHED_TIMEO);
 }
 
@@ -340,6 +339,8 @@ static void rfcomm_dlc_unlink(struct rfcomm_dlc *d)
 	list_del(&d->list);
 	d->session = NULL;
 	rfcomm_dlc_put(d);
+
+	rfcomm_session_put(s);
 }
 
 static struct rfcomm_dlc *rfcomm_dlc_get(struct rfcomm_session *s, u8 dlci)
@@ -1102,7 +1103,6 @@ static int rfcomm_recv_ua(struct rfcomm_session *s, u8 dlci)
 			if (list_empty(&s->dlcs)) {
 				s->state = BT_DISCONN;
 				rfcomm_send_disc(s, 0);
-                                rfcomm_session_put(s);
 			}
 
 			break;
@@ -1744,6 +1744,7 @@ static inline void rfcomm_process_dlcs(struct rfcomm_session *s)
 
 		if (test_bit(RFCOMM_TIMED_OUT, &d->flags)) {
 			__rfcomm_dlc_close(d, ETIMEDOUT);
+			rfcomm_dlc_put(d);
 			continue;
 		}
 

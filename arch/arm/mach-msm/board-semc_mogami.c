@@ -186,7 +186,7 @@
 #define MSM_FB_SIZE		0x500000
 #endif /* CONFIG_FB_MSM_HDMI_SII9024A_PANEL */
 #define MSM_GPU_PHYS_SIZE       SZ_4M
-#define MSM_PMEM_CAMERA_SIZE    0x2F00000
+#define MSM_PMEM_CAMERA_SIZE    0x2900000
 #define MSM_PMEM_ADSP_SIZE      0x1300000
 #define PMEM_KERNEL_EBI1_SIZE   0x600000
 
@@ -3396,7 +3396,7 @@ static struct kgsl_device_platform_data kgsl_3d0_pdata = {
 			{
 				.gpu_freq = 192000000,
 				.bus_freq = 152000000,
-				.io_fraction = 33,
+				.io_fraction = 50,
 			},
 			{
 				.gpu_freq = 192000000,
@@ -3459,7 +3459,7 @@ static struct kgsl_device_platform_data kgsl_2d0_pdata = {
 		.num_levels = 1,
 		/* HW workaround, run Z180 SYNC @ 192 MHZ */
 		.set_grp_async = NULL,
-		.idle_timeout = HZ/10,
+		.idle_timeout = HZ/20,
 		.nap_allowed = true,
 	},
 	.clk = {
