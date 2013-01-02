@@ -51,9 +51,6 @@
   c ^= b; c -= __rot(b,24); \
 }
 
-/* The golden ration: an arbitrary value */
-#define JHASH_GOLDEN_RATIO 0xdeadbeef
-
 /* The most generic version, hashes an arbitrary sequence
  * of bytes.  No alignment or length assumptions are made about
  * the input key. The result depends on endianness.
